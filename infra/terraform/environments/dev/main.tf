@@ -32,6 +32,30 @@ module "network" {
   }
 }
 
+module "security" {
+  source = "../../modules/security"
+
+  name_prefix = local.name_prefix
+  vpc_id      = module.network.vpc_id
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
+module "database" {
+  source = "../../modules/database"
+
+  name_prefix        = local.name_prefix
+  private_subnet_ids = module.network.private_subnet_ids
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -42,4 +66,20 @@ output "public_subnet_ids" {
 
 output "private_subnet_ids" {
   value = module.network.private_subnet_ids
+}
+
+output "alb_security_group_id" {
+  value = module.security.alb_security_group_id
+}
+
+output "app_security_group_id" {
+  value = module.security.app_security_group_id
+}
+
+output "db_security_group_id" {
+  value = module.security.db_security_group_id
+}
+
+output "db_subnet_group_name" {
+  value = module.database.db_subnet_group_name
 }

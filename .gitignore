@@ -8,6 +8,7 @@ crash.log
 *.tfplan
 plan.txt
 plan_free.txt
+security-plan.txt
 
 !.terraform.lock.hcl
 
