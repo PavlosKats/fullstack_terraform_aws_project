@@ -1,29 +1,33 @@
-Terraform
+# Terraform
 **/.terraform/*
 *.tfstate
 .tfstate.
 crash.log
 *.tfvars
 *.tfvars.json
-.terraform.lock.hcl
+*.tfplan
+plan.txt
+plan_free.txt
 
-Node
+!.terraform.lock.hcl
+
+# Node
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-Build/test
+# Build/test
 dist/
 build/
 coverage/
-Environment and secrets
+# Environment and secrets
 .env
 .env.*
 !.env.example
 *.pem
 *.key
 
-OS/editor
+# OS/editor
 .DS_Store
 Thumbs.db

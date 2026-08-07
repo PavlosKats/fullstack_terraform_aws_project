@@ -1,0 +1,45 @@
+
+locals {
+  name_prefix = "${var.project_name}-${var.environment}"
+}
+
+output "environment_name" {
+  description = "Current Terraform environment name."
+  value       = var.environment
+}
+
+output "aws_region" {
+  description = "AWS region configured for this environment."
+  value       = var.aws_region
+}
+
+output "name_prefix" {
+  description = "Common naming prefix for resources."
+  value       = local.name_prefix
+}
+
+module "network" {
+  source               = "../../modules/network"
+  name_prefix          = local.name_prefix
+  vpc_cidr             = var.vpc_cidr
+  availability_zones   = var.availability_zones
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
+output "vpc_id" {
+  value = module.network.vpc_id
+}
+
+output "public_subnet_ids" {
+  value = module.network.public_subnet_ids
+}
+
+output "private_subnet_ids" {
+  value = module.network.private_subnet_ids
+}
