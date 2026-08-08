@@ -9,6 +9,7 @@ crash.log
 plan.txt
 plan_free.txt
 security-plan.txt
+secrets-plan.txt
 
 !.terraform.lock.hcl
 

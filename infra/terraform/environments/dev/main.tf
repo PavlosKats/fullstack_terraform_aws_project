@@ -56,6 +56,17 @@ module "database" {
   }
 }
 
+module "secrets" {
+  source = "../../modules/secrets"
+
+  name_prefix = local.name_prefix
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -82,4 +93,12 @@ output "db_security_group_id" {
 
 output "db_subnet_group_name" {
   value = module.database.db_subnet_group_name
+}
+
+output "db_secret_arn" {
+  value = module.secrets.db_secret_arn
+}
+
+output "db_secret_name" {
+  value = module.secrets.db_secret_name
 }
