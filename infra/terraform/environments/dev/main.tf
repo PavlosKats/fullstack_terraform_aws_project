@@ -44,11 +44,11 @@ module "security" {
   }
 }
 
-module "database" {
-  source = "../../modules/database"
 
-  name_prefix        = local.name_prefix
-  private_subnet_ids = module.network.private_subnet_ids
+module "secrets" {
+  source = "../../modules/secrets"
+
+  name_prefix = local.name_prefix
 
   tags = {
     Project     = var.project_name
@@ -56,10 +56,14 @@ module "database" {
   }
 }
 
-module "secrets" {
-  source = "../../modules/secrets"
+module "database" {
+  source = "../../modules/database"
 
-  name_prefix = local.name_prefix
+  name_prefix          = local.name_prefix
+  private_subnet_ids   = module.network.private_subnet_ids
+  db_security_group_id = module.security.db_security_group_id
+
+  db_password = var.db_password
 
   tags = {
     Project     = var.project_name
@@ -101,4 +105,12 @@ output "db_secret_arn" {
 
 output "db_secret_name" {
   value = module.secrets.db_secret_name
+}
+
+output "db_instance_endpoint" {
+  value = module.database.db_instance_endpoint
+}
+
+output "db_instance_identifier" {
+  value = module.database.db_instance_identifier
 }

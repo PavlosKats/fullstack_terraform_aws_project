@@ -39,3 +39,9 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   default     = ["10.20.11.0/24", "10.20.12.0/24"]
 }
+
+variable "db_password" {
+  description = "Master password for the PostgreSQL database"
+  type        = string
+  sensitive   = true
+}
