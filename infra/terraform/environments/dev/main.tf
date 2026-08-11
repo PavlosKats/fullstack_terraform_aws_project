@@ -71,6 +71,21 @@ module "database" {
   }
 }
 
+module "config" {
+  source = "../../modules/config"
+
+  name_prefix    = local.name_prefix
+  db_host        = module.database.db_instance_endpoint
+  db_port        = 5432
+  db_name        = "tasktracker"
+  db_secret_name = module.secrets.db_secret_name
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -113,4 +128,20 @@ output "db_instance_endpoint" {
 
 output "db_instance_identifier" {
   value = module.database.db_instance_identifier
+}
+
+output "db_host_param_name" {
+  value = module.config.db_host_param_name
+}
+
+output "db_port_param_name" {
+  value = module.config.db_port_param_name
+}
+
+output "db_name_param_name" {
+  value = module.config.db_name_param_name
+}
+
+output "db_secret_name_param_name" {
+  value = module.config.db_secret_name_param_name
 }
