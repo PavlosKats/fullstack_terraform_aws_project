@@ -86,6 +86,17 @@ module "config" {
   }
 }
 
+module "compute" {
+  source = "../../modules/compute"
+
+  name_prefix = local.name_prefix
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -144,4 +155,12 @@ output "db_name_param_name" {
 
 output "db_secret_name_param_name" {
   value = module.config.db_secret_name_param_name
+}
+
+output "backend_ecr_repository_name" {
+  value = module.compute.backend_ecr_repository_name
+}
+
+output "backend_ecr_repository_url" {
+  value = module.compute.backend_ecr_repository_url
 }
