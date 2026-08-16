@@ -96,3 +96,13 @@ resource "aws_vpc_security_group_ingress_rule" "db_from_app" {
 
   description = "Allow app to reach PostgreSQL"
 }
+
+resource "aws_vpc_security_group_egress_rule" "app_to_internet_https" {
+  security_group_id = aws_security_group.app.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+
+  description = "Allow app outbound HTTPS for AWS APIs"
+}
