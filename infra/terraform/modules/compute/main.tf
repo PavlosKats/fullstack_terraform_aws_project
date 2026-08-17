@@ -151,6 +151,20 @@ resource "aws_lb_listener" "http" {
   })
 }
 
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.backend.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.backend.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend.arn
+  }
+}
+
+
 resource "aws_ecs_task_definition" "backend" {
   family                   = "${var.name_prefix}-backend"
   requires_compatibilities = ["FARGATE"]
@@ -230,4 +244,13 @@ resource "aws_ecs_service" "backend" {
   tags = merge(local.common_tags, {
     Name = "${var.name_prefix}-backend-service"
   })
+}
+
+resource "aws_acm_certificate" "backend" {
+  domain_name       = "api.yourdomain.com"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

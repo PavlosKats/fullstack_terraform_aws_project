@@ -16,6 +16,12 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
+variable "aws_profile" {
+  description = "Optional AWS CLI profile to use for authentication. Leave empty to use default AWS credential resolution."
+  type        = string
+  default     = ""
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string

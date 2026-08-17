@@ -107,6 +107,17 @@ module "compute" {
   }
 }
 
+module "frontend_hosting" {
+  source = "../../modules/frontend_hosting"
+
+  name_prefix = local.name_prefix
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -185,4 +196,16 @@ output "ecs_service_name" {
 
 output "alb_dns_name" {
   value = module.compute.alb_dns_name
+}
+
+output "frontend_bucket_name" {
+  value = module.frontend_hosting.frontend_bucket_name
+}
+
+output "frontend_cloudfront_domain_name" {
+  value = module.frontend_hosting.frontend_cloudfront_domain_name
+}
+
+output "frontend_cloudfront_distribution_id" {
+  value = module.frontend_hosting.frontend_cloudfront_distribution_id
 }
