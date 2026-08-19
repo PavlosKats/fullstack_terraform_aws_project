@@ -51,8 +51,8 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
   name                              = "${var.name_prefix}-frontend-oac"
   description                       = "OAC for frontend S3 bucket"
   origin_access_control_origin_type = "s3"
-  signing_behavior                 = "always"
-  signing_protocol                 = "sigv4"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "frontend" {
@@ -63,7 +63,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   origin {
     domain_name              = aws_s3_bucket.frontend.bucket_regional_domain_name
     origin_id                = "s3-frontend"
-    origin_access_control_id  = aws_cloudfront_origin_access_control.frontend.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.frontend.id
   }
 
   default_cache_behavior {

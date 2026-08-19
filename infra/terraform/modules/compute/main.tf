@@ -239,7 +239,10 @@ resource "aws_ecs_service" "backend" {
     container_port   = var.container_port
   }
 
-  depends_on = [aws_lb_listener.http]
+  depends_on = [
+    aws_lb_listener.http,
+    aws_lb_listener.https
+  ]
 
   tags = merge(local.common_tags, {
     Name = "${var.name_prefix}-backend-service"
@@ -247,7 +250,7 @@ resource "aws_ecs_service" "backend" {
 }
 
 resource "aws_acm_certificate" "backend" {
-  domain_name       = "api.yourdomain.com"
+  domain_name       = "api.pavloskdev.com"
   validation_method = "DNS"
 
   lifecycle {
