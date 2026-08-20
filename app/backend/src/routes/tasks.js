@@ -1,30 +1,55 @@
-const express = require('express');
+const express = require("express");
+const pool = require("../db/pool");
+
 const router = express.Router();
 
-// In-memory task storage for demonstration purposes
-const tasks = [];
+router.get("/tasks", async (req, res, next) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        id,
+        title,
+        completed,
+        created_at AS "createdAt"
+      FROM tasks
+      ORDER BY created_at DESC
+    `);
 
-router.get("/tasks", (req, res) => {
-    res.json(tasks);
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
 });
 
-// Additional routes for creating, updating, and deleting tasks can be added here
-router.post("/tasks", (req, res) => {
-    const { title } = req.body;
+router.post("/tasks", async (req, res, next) => {
+  const { title } = req.body;
 
-    if (!title || typeof title !== "string") {
-        return res.status(400).json({ error: { message: "Title is required and must be a string" } });
-    }
+  if (!title || typeof title !== "string" || !title.trim()) {
+    return res.status(400).json({
+      error: {
+        message: "Title is required and must be a non-empty string",
+      },
+    });
+  }
 
-    const newTask = {
-        id: tasks.length + 1,
-        title: title.trim(),
-        completed: false,
-        createdAt: new Date().toISOString()
-    };
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO tasks (title)
+        VALUES ($1)
+        RETURNING
+          id,
+          title,
+          completed,
+          created_at AS "createdAt"
+      `,
+      [title.trim()]
+    );
 
-    tasks.push(newTask);
-    res.status(201).json(newTask);
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
