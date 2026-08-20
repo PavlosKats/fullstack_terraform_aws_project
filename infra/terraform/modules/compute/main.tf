@@ -6,7 +6,7 @@ locals {
 
 resource "aws_ecr_repository" "backend" {
   name                 = "${var.name_prefix}-backend"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
@@ -142,8 +142,13 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.backend.arn
+    type             = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 
   tags = merge(local.common_tags, {
@@ -190,7 +195,7 @@ resource "aws_ecs_task_definition" "backend" {
       environment = [
         { name = "NODE_ENV", value = "production" },
         { name = "PORT", value = tostring(var.container_port) },
-        { name = "CORS_ORIGIN", value = "*" },
+        { name = "CORS_ORIGIN", value = "https://d1j1vldu3b6tbq.cloudfront.net" },
         { name = "DB_HOST", value = var.db_host },
         { name = "DB_PORT", value = tostring(var.db_port) },
         { name = "DB_NAME", value = var.db_name },

@@ -22,6 +22,11 @@ variable "aws_profile" {
   default     = ""
 }
 
+variable "backend_image_tag" {
+  description = "Immutable ECR image tag deployed to ECS."
+  type        = string
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string

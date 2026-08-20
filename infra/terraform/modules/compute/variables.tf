@@ -24,9 +24,8 @@ variable "app_security_group_id" {
 }
 
 variable "backend_image_tag" {
-  description = "Tag to deploy from ECR"
+  description = "Immutable ECR image tag deployed to ECS"
   type        = string
-  default     = "v1"
 }
 
 variable "container_port" {

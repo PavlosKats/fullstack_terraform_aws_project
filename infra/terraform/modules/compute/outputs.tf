@@ -17,3 +17,19 @@ output "ecs_service_name" {
 output "alb_dns_name" {
   value = aws_lb.backend.dns_name
 }
+
+output "alb_zone_id" {
+  value = aws_lb.backend.zone_id
+}
+
+output "backend_certificate_arn" {
+  value = aws_acm_certificate.backend.arn
+}
+
+output "backend_certificate_validation_name" {
+  value = one(aws_acm_certificate.backend.domain_validation_options).resource_record_name
+}
+
+output "backend_certificate_validation_value" {
+  value = one(aws_acm_certificate.backend.domain_validation_options).resource_record_value
+}

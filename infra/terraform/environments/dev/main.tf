@@ -99,7 +99,23 @@ module "compute" {
   db_name               = "tasktracker"
   db_user               = "tasktracker_admin"
   db_secret_arn         = module.secrets.db_secret_arn
-  backend_image_tag     = "v1"
+  backend_image_tag     = var.backend_image_tag
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
+module "dns" {
+  source = "../../modules/dns"
+
+  domain_name                  = "pavloskdev.com"
+  api_record_name              = "api"
+  certificate_validation_name  = module.compute.backend_certificate_validation_name
+  certificate_validation_value = module.compute.backend_certificate_validation_value
+  alb_dns_name                 = module.compute.alb_dns_name
+  alb_zone_id                  = module.compute.alb_zone_id
 
   tags = {
     Project     = var.project_name
